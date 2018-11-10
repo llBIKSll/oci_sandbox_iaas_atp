@@ -61,8 +61,8 @@ Add the terraform command to your path
 \- On Windows: go to System Steetings, Advanced, Environment Variables, and add the path to your Terraform directory
 
 
-**User\
-**User with the right access and a API Key will be generated doing the
+**User**\
+User with the right access and a API Key will be generated doing the
 this guide
 
 **Information needed**\
