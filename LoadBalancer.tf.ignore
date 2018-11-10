@@ -1,0 +1,92 @@
+resource "oci_load_balancer" "PublicLoadBalancer" {
+  shape          = "100Mbps"
+  compartment_id = "${var.compartment_ocid}"
+  subnet_ids     = [
+    "${oci_core_subnet.BST-SN-AD1.id}",
+    "${oci_core_subnet.BST-SN-AD2.id}"
+  ]
+  display_name   = "PublicLoadBalancer"
+}
+
+resource "oci_load_balancer_backend_set" "Web-BackendSet" {
+  name             = "Web-BackendSet"
+  load_balancer_id = "${oci_load_balancer.PublicLoadBalancer.id}"
+  policy           = "ROUND_ROBIN"
+  #session_persistence_configuration = "*"
+
+  health_checker {
+    port     = "8080"
+    protocol = "HTTP"
+    response_body_regex = ".*"
+    url_path = "/"
+  }
+}
+
+
+# resource "oci_load_balancer_certificate" "LB-Cert-Proj01" {
+#   load_balancer_id   = "${oci_load_balancer.PublicLoadBalancer.id}"
+#   ca_certificate     = "${file(var.ssl_ca_certificate_path)}"
+#   certificate_name   = "LB-Cert-Proj01"
+#   private_key        = "${file(var.ssl_private_key_path)}"
+#   passphrase         = "******"
+#   public_certificate = "${file(var.ssl_public_certificate_path)}"
+# }
+
+# resource "oci_load_balancer_path_route_set" "test_path_route_set" {
+#     #Required
+#     load_balancer_id = "${oci_load_balancer.lb1.id}"
+#     name = "pr-set1"
+#     path_routes {
+#         #Required
+#         backend_set_name = "${oci_load_balancer_backend_set.lb-bes1.name}"
+#         path = "/example/video/123"
+#         path_match_type {
+#             #Required
+#             match_type = "EXACT_MATCH"
+#         }
+#
+#     }
+# }
+#
+
+# resource "oci_load_balancer_backend" "Web-Backend-01" {
+#   load_balancer_id = "${oci_load_balancer.PublicLoadBalancer.id}"
+#   backendset_name  = "${oci_load_balancer_backend_set.Web-BackendSet.id}"
+#   ip_address       = "${oci_core_instance.AppInstance01.private_ip}"
+#   port             = 8080
+#   backup           = false
+#   drain            = false
+#   offline          = false
+#   #weight           = 1
+# }
+
+# resource "oci_load_balancer_hostname" "Hostname-01" {
+#     #Required
+#     hostname = "web1.oracle.com"
+#     load_balancer_id = "${oci_load_balancer.PublicLoadBalancer.id}"
+#     name = "Hostname-02"
+# }
+#
+# resource "oci_load_balancer_hostname" "Hostname-02" {
+#     #Required
+#     hostname = "web2.oracle.com"
+#     load_balancer_id = "${oci_load_balancer.PublicLoadBalancer.id}"
+#     name = "Hostname-02"
+# }
+
+# resource "oci_load_balancer_listener" "Web-Listener" {
+#   name             = "http"
+#   load_balancer_id = "${oci_load_balancer.PublicLoadBalancer.id}"
+#   default_backend_set_name  = "${oci_load_balancer_backend_set.Web-BackendSet.id}"
+#
+#   #hostname_names           = ["${oci_load_balancer_hostname.test_hostname1.name}", "${oci_load_balancer_hostname.test_hostname2.name}"]
+#   port                     = 80
+#   protocol                 = "HTTP"
+#   # connection_configuration {
+#   #   idle_timeout_in_seconds = "300"
+#   # }
+# }
+
+output "lb_public_ip" {
+  value = ["${oci_load_balancer.PublicLoadBalancer.ip_addresses}"]
+}

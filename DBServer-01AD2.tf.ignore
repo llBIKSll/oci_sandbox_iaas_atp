@@ -1,0 +1,56 @@
+resource "oci_database_db_system" "DBServer01AD2" {
+	#Required
+	availability_domain = "${lookup(data.oci_identity_availability_domains.AD.availability_domains[var.domains["AD2"]],"name")}"
+	compartment_id = "${var.compartment_ocid}"
+
+	#database_edition = "STANDARD_EDITION"
+	database_edition = "ENTERPRISE_EDITION"
+	#database_edition = "ENTERPRISE_EDITION_EXTREME_PERFORMANCE"
+	#database_edition = "ENTERPRISE_EDITION_HIGH_PERFORMANCE"
+
+  db_home {
+		#Required
+		database {
+			#Required
+			admin_password = "0r#cleCSMR0cks#1819"
+			db_name = "demoad2"
+
+			#Optional
+			character_set = "AL32UTF8"
+			db_backup_config {
+
+				#Optional
+				auto_backup_enabled = true
+			}
+
+			db_workload = "OLTP"
+			ncharacter_set = "AL16UTF16"
+		}
+
+		# db_version = "11.2.0.4"
+		# db_version = "12.1.0.2"
+		# db_version = "12.2.0.1"
+		# db_version = "18.1.0.0"
+		db_version = "18.2.0.0"
+		
+		#Optional
+		display_name = "demodb2"
+	}
+
+	hostname = "demodbad2"
+	shape = "VM.Standard2.1"
+	ssh_public_keys = ["${file(var.ssh_public_key_path)}"]
+	subnet_id = "${oci_core_subnet.DB-SN-AD2.id}"
+
+	#Optional
+	#backup_subnet_id = "${oci_database_backup_subnet.test_backup_subnet.id}"
+	#cluster_name = "${var.db_system_cluster_name}"
+	#data_storage_percentage = "80"
+  data_storage_size_in_gb = "256"
+	disk_redundancy = "HIGH"
+	display_name = "demodb2"
+	#domain = "${var.db_system_domain}"
+	license_model = "LICENSE_INCLUDED"
+	#license_model = "BRING_YOUR_OWN_LICENSE"
+	node_count = "1"
+}

@@ -1,0 +1,57 @@
+#!/bin/bash
+sudo su
+yum install openswan lsof -y
+for vpn in /proc/sys/net/ipv4/conf/*;
+do echo 0 > $vpn/accept_redirects;
+echo 0 > $vpn/send_redirects;
+done
+echo net.ipv4.ip_forward = 1 >> /etc/sysctl.conf
+echo net.ipv4.conf.all.accept_redirects = 0 >> /etc/sysctl.conf
+echo net.ipv4.conf.all.send_redirects = 0 >> /etc/sysctl.conf
+echo 2 > /proc/sys/net/ipv4/conf/all/rp_filter
+echo 2 > /proc/sys/net/ipv4/conf/default/rp_filter
+echo 2 > /proc/sys/net/ipv4/conf/eth0/rp_filter
+echo 2 > /proc/sys/net/ipv4/conf/eth1/rp_filter
+echo 2 > /proc/sys/net/ipv4/conf/ens3/rp_filter
+echo 2 > /proc/sys/net/ipv4/conf/ens4/rp_filter
+sysctl -p
+iptables -P INPUT ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -F
+systemctl restart ipsec.service
+systemctl enable ipsec.service
+mv /etc/ipsec.conf /etc/ipsec.conf.bak
+cat <<EOF >> /etc/ipsec.conf
+config setup
+        plutodebug=all
+        plutostderrlog=/var/log/pluto.log
+        protostack=netkey
+        nat_traversal=yes
+        virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8,%v6:fd00::/8,%v6:fe80::/10
+        # OE is now off by default. Uncomment and change to on, to enable.
+        oe=off
+
+conn mysubnet
+        also=corente
+        leftsubnet=192.168.1.128/25
+        rightsubnet=172.16.1.0/24
+
+conn corente
+        authby=secret
+        auto=start
+        pfs=yes
+        left=192.168.1.2
+        right=129.158.67.13
+        rightid=129.158.67.13
+        ike=aes256-sha1;modp1024
+        phase2alg=aes256-sha1;modp1024
+EOF
+cat <<EOF >> /etc/ipsec.secrets
+192.168.1.2 129.158.67.13 : PSK "kayode123"
+EOF
+systemctl restart ipsec.service
+touch ~opc/userdata.`date +%s`.finish
+service ipsec verify
+service ipsec status
+ipsec auto --status

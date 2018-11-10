@@ -1,0 +1,69 @@
+// Create Public subnets
+
+resource "oci_core_subnet" "BST-SN-AD2" {
+  // AD 3
+  availability_domain = "${lookup(data.oci_identity_availability_domains.AD.availability_domains[var.domains["AD2"]],"name")}"
+  cidr_block = "${var.BST_SN2_CIDR}"
+# display_name = "BST-SN-AD2"
+  display_name = "DMZ-Subnet-AD2"
+  dns_label = "BSTSNAD2"
+  compartment_id = "${var.compartment_ocid}"
+  vcn_id = "${oci_core_virtual_network.DefaultVCN.id}"
+  security_list_ids = ["${oci_core_security_list.BST-SL.id}"]
+
+  route_table_id = "${oci_core_route_table.DMZ-RT.id}"
+  dhcp_options_id = "${oci_core_dhcp_options.DMZ-DHCP.id}"
+}
+
+// Create Private subnets
+
+resource "oci_core_subnet" "MGMT-SN-AD2" {
+  // AD 2
+  availability_domain = "${lookup(data.oci_identity_availability_domains.AD.availability_domains[var.domains["AD2"]],"name")}"
+  cidr_block = "${var.MGMT_SN2_CIDR}"
+  display_name = "MGMT-Subnet-AD2"
+  dns_label = "MGMTSNAD2"
+  compartment_id = "${var.compartment_ocid}"
+  vcn_id = "${oci_core_virtual_network.DefaultVCN.id}"
+  security_list_ids = ["${oci_core_security_list.MGMT-SL.id}"]
+
+  route_table_id = "${oci_core_route_table.MGMT-RT.id}"
+  dhcp_options_id = "${oci_core_dhcp_options.MGMT-DHCP.id}"
+  prohibit_public_ip_on_vnic = true
+}
+
+resource "oci_core_subnet" "APP-SN-AD2" {
+  // AD 2
+  availability_domain = "${lookup(data.oci_identity_availability_domains.AD.availability_domains[var.domains["AD2"]],"name")}"
+  cidr_block = "${var.APP_SN2_CIDR}"
+# display_name = "APP-SN-AD2"
+  display_name = "APP-Subnet-AD2"
+  dns_label = "APPSNAD2"
+  compartment_id = "${var.compartment_ocid}"
+  vcn_id = "${oci_core_virtual_network.DefaultVCN.id}"
+  security_list_ids = ["${oci_core_security_list.APP-SL.id}"]
+
+  route_table_id = "${oci_core_route_table.APP-RT.id}"
+  dhcp_options_id = "${oci_core_dhcp_options.APP-DHCP.id}"
+
+  prohibit_public_ip_on_vnic = true
+}
+
+
+resource "oci_core_subnet" "DB-SN-AD2" {
+  // AD 2
+  availability_domain = "${lookup(data.oci_identity_availability_domains.AD.availability_domains[var.domains["AD2"]],"name")}"
+  cidr_block = "${var.DB_SN2_CIDR}"
+# display_name = "DB-SN-AD2"
+  display_name = "DB-Subnet-AD2"
+  dns_label = "DBSNAD2"
+  compartment_id = "${var.compartment_ocid}"
+  vcn_id = "${oci_core_virtual_network.DefaultVCN.id}"
+  security_list_ids = ["${oci_core_security_list.DB-SL.id}"]
+
+  route_table_id = "${oci_core_route_table.DB-RT.id}"
+  dhcp_options_id = "${oci_core_dhcp_options.DB-DHCP.id}"
+
+  prohibit_public_ip_on_vnic = true
+}
+
