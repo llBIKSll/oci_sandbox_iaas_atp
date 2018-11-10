@@ -1,11 +1,11 @@
-Guide - CSM Quick-Start
+Guide - IaaS and ATP as Code
 =======================
 
 *Deploy a basic setup for an Application using ATP*
 
-This guide helps you to deploy a setup below service for your customer.
-The setup is a sandbox environment; it is not recommended for
-production.
+Purpose: I have made this sample to support you to try out new en stuff and learn more. It is not for production is only for training and trying out. 
+Instead of to build and environment each time via the UI. 
+Then save time by using IaC for the basic foundation to setup what is need to trying out and learn.
 
 Services
 
@@ -36,8 +36,7 @@ Overview
 
 **Use full Links**
 
-[Learn more about IaC and
-Terraform](file:///C:\confluence\display\ECSP\IaC+and+Terraform)
+
 
 How to use the Terraform recipe
 -------------------------------
@@ -56,6 +55,10 @@ is need to host the services.
 You need Terraform installed on your machine.\
 If don't have it then follow this guide -
 <https://www.terraform.io/intro/getting-started/install.html>
+Add the terraform command to your path
+    On Mac: export PATH=$PATH:pwd
+    On Windows: go to System Steetings, Advanced, Environment Variables, and add the path to your Terraform directory
+
 
 **User\
 **User with the right access and a API Key will be generated doing the
