@@ -55,9 +55,10 @@ is need to host the services.
 You need Terraform installed on your machine.\
 If don't have it then follow this guide -
 <https://www.terraform.io/intro/getting-started/install.html>
+
 Add the terraform command to your path
-    On Mac: export PATH=$PATH:pwd
-    On Windows: go to System Steetings, Advanced, Environment Variables, and add the path to your Terraform directory
+\- On Mac: export PATH=$PATH:pwd
+\- On Windows: go to System Steetings, Advanced, Environment Variables, and add the path to your Terraform directory
 
 
 **User\
