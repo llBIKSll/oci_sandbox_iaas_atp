@@ -78,10 +78,10 @@ variable "DB_SN3_CIDR" {
 #}
 
 variable "private_key_path" {
-  default =".\.oci\oci_api_key.pem"
+  default =".\\.oci\\oci_api_key.pem"
 }
 variable "ssh_public_key_path" {
-  default = ".\.ssh\id_rsa.pub"
+  default = ".\\.ssh\\id_rsa.pub"
 }
 
 /*
