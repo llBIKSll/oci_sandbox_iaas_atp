@@ -1,8 +1,6 @@
 Guide - IaaS and ATP as Code
 =======================
 
-
-
 *Deploy a basic setup for an Application using ATP*
 
 Purpose: I have made this sample to support you to try out new en stuff and learn more. It is not for production is only for training and trying out. 
