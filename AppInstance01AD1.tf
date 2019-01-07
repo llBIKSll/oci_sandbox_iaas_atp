@@ -29,7 +29,7 @@ resource "oci_core_instance" "AppInstance01AD1" {
   availability_domain = "${lookup(data.oci_identity_availability_domains.AD.availability_domains[var.domains["AD1"]],"name")}"
   compartment_id = "${var.compartment_ocid}"
   display_name = "AppInstance01AD1"
-  shape = "VM.Standard1.2"
+  shape = "VM.Standard2.2"
   fault_domain = "${var.fault_domains["FD1"]}"
 
   create_vnic_details {
